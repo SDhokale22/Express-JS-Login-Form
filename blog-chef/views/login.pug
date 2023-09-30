@@ -1,0 +1,14 @@
+html 
+    head 
+        link(rel="stylesheet", href="/assets/css/style.css")
+        title BlogChef - Admin
+    body 
+        .container
+        h1#admin-title BlogChef - Admin 
+        #login-panel 
+            h3 Login to your Account 
+            form(method="post" action="/admin/login" name="loginForm")
+                input(type="text" name="email" placeholder="E-mail")
+                input(type="password" name="password" placeholder="Password")
+                button(type="sublit" id="loginBtn") Login
+        script(src="/assets/js/main/js")

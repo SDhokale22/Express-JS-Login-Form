@@ -1,52 +1,42 @@
+//view engin pug
 import express from "express";
-//import {parse} from "querystring";
-import {join} from "path";
-
+import { join } from "path";
 const app = express();
-/*
-const isPalindrome = str => {
-    let trimAndPrepare = str
-        .toLowerCase()
-        .trim()
-        .replace(/[\w_]/g, "");
-    return (
-        trimAndPrepare === 
-        trimAndPrepare
-        .split("")
-        .reverse()
-        .join("")
-    );
-};
-*/
 
 app.use("/assets", express.static(join(__dirname, "public")));
+app.set("view engine", "pug");
 
-app.get("/", (req,res) =>{
-    res.status(200).send("<h1>Blog chef says Hello!!</h1>");
+app.get("/", (req, res) => {
+  res.send("<h1>BlogChef</h1>");
 });
 
-app.get("/admin/login", (req,res) =>{
-    res.sendFile(join(__dirname, "views", "login.html"));
-}).post("/admin/login", (req, res) => {
-    res.send("Login successfully!!");
-});
+app
+  .get("/admin/login", (req, res) => res.render("login"))
+  .post("/admin/login", (req, res) => res.redirect("/admin/dashboard"));
 
-/*
-app.post("/palindrome", (req,res) =>{
-    let body = "";
-    req.on("data", data => (body += data));
-    res.on("end", () => {
-        //console.log(parse(body));
-        let {word} = parse(body);
-        res.send(
-            word 
-            ? {
-                word,
-                isPalindrome: isPalindrome(word)
-            }
-            : { message: "No word supplied"
-        });
-    });
-});
-*/
-app.listen(3000, () => console.log("Blog chef is cooking on port 3000"));
+app.get("/admin/dashboard", (req, res) =>
+  res.render("dashboard", {
+    user: "Joe Mockery",
+    posts: [
+      {
+        id: 1,
+        author: "Joe M",
+        title: "I love Express",
+        content: "Express is a wonderful framework for building Node.js apps"
+      },
+      {
+        id: 2,
+        author: "Mike F",
+        title: "Have you tried Pug?",
+        content:
+          "I recently tried the Pug templating language and its excellent"
+      }
+    ]
+  })
+);
+
+app.get("/admin/logout", (req, res) => res.redirect("/admin/login"));
+
+app.post("/admin/approve", (req, res) => res.redirect("/admin/dashboard"));
+
+app.listen(3000, () => console.log("Blog Chef is cooking on port 3000"));
